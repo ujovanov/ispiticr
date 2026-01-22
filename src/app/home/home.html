@@ -1,0 +1,233 @@
+<div class="min-h-screen bg-slate-50 py-8">
+  <div class="container mx-auto px-4">
+    <div class="sm:flex gap-6" id="home-container">
+        
+      <div class="sm:w-1/3" id="filter-container">
+        <div class="bg-white rounded-lg shadow-md p-6 sticky top-12">
+          <h2 class="text-2xl font-bold text-sky-500 mb-6 pb-4 border-b border-slate-200">
+            Filter
+          </h2>
+          
+          <div class="space-y-6">
+            <form (ngSubmit)="searchToys()" class="space-y-4">
+              
+              <div>
+                <label for="naziv" class="block text-sm font-medium text-slate-700 mb-1">Naziv</label>
+                <input 
+                  type="text" 
+                  id="naziv"
+                  [(ngModel)]="searchCriteria.naziv"
+                  name="naziv"
+                  class="w-full px-3 py-2 border border-slate-300 rounded-md focus:outline-none focus:ring-2 focus:ring-sky-500 focus:border-transparent"
+                  placeholder="Pretraži po nazivu..."
+                />
+              </div>
+
+              <div>
+                <label for="opis" class="block text-sm font-medium text-slate-700 mb-1">Opis</label>
+                <input 
+                  type="text" 
+                  id="opis"
+                  [(ngModel)]="searchCriteria.opis"
+                  name="opis"
+                  class="w-full px-3 py-2 border border-slate-300 rounded-md focus:outline-none focus:ring-2 focus:ring-sky-500 focus:border-transparent"
+                  placeholder="Pretraži po opisu..."
+                />
+              </div>
+
+              <div>
+                <label for="tip" class="block text-sm font-medium text-slate-700 mb-1">Tip igračke</label>
+                <input 
+                  type="text" 
+                  id="tip"
+                  [(ngModel)]="searchCriteria.tip"
+                  name="tip"
+                  class="w-full px-3 py-2 border border-slate-300 rounded-md focus:outline-none focus:ring-2 focus:ring-sky-500 focus:border-transparent"
+                  placeholder="Slagalica, slikovnica..."
+                />
+              </div>
+
+              <div>
+                <label for="uzrast" class="block text-sm font-medium text-slate-700 mb-1">Uzrast</label>
+                <input 
+                  type="text" 
+                  id="uzrast"
+                  [(ngModel)]="searchCriteria.uzrast"
+                  name="uzrast"
+                  class="w-full px-3 py-2 border border-slate-300 rounded-md focus:outline-none focus:ring-2 focus:ring-sky-500 focus:border-transparent"
+                  placeholder="3-5 godina, 6-8 godina..."
+                />
+              </div>
+
+              <div>
+                <label for="ciljna_grupa" class="block text-sm font-medium text-slate-700 mb-1">Ciljna grupa</label>
+                <select 
+                  id="ciljna_grupa"
+                  [(ngModel)]="searchCriteria.ciljna_grupa"
+                  name="ciljna_grupa"
+                  class="w-full px-3 py-2 border border-slate-300 rounded-md focus:outline-none focus:ring-2 focus:ring-sky-500 focus:border-transparent"
+                >
+                  <option value="">Sve</option>
+                  <option value="dečak">Dečak</option>
+                  <option value="devojčica">Devojčica</option>
+                  <option value="svi">Svi</option>
+                </select>
+              </div>
+
+              <div>
+                <label class="block text-sm font-medium text-slate-700 mb-1">Cena (RSD)</label>
+                <div class="flex space-x-2">
+                  <input 
+                    type="number" 
+                    [(ngModel)]="searchCriteria.cena_od"
+                    name="cena_od"
+                    placeholder="Od"
+                    min="0"
+                    class="flex-1 px-3 py-2 border border-slate-300 rounded-md focus:outline-none focus:ring-2 focus:ring-sky-500 focus:border-transparent"
+                  />
+                  <input 
+                    type="number" 
+                    [(ngModel)]="searchCriteria.cena_do"
+                    name="cena_do"
+                    placeholder="Do"
+                    min="0"
+                    class="flex-1 px-3 py-2 border border-slate-300 rounded-md focus:outline-none focus:ring-2 focus:ring-sky-500 focus:border-transparent"
+                  />
+                </div>
+              </div>
+
+              <div>
+                <label class="block text-sm font-medium text-slate-700 mb-1">Datum proizvodnje</label>
+                <div class="flex space-x-2">
+                  <input 
+                    type="date" 
+                    [(ngModel)]="searchCriteria.datum_od"
+                    name="datum_od"
+                    class="flex-1 px-3 py-2 border border-slate-300 rounded-md focus:outline-none focus:ring-2 focus:ring-sky-500 focus:border-transparent"
+                  />
+                  <input 
+                    type="date" 
+                    [(ngModel)]="searchCriteria.datum_do"
+                    name="datum_do"
+                    class="flex-1 px-3 py-2 border border-slate-300 rounded-md focus:outline-none focus:ring-2 focus:ring-sky-500 focus:border-transparent"
+                  />
+                </div>
+              </div>
+
+              <div class="flex space-x-3 pt-4">
+                <button 
+                  type="submit"
+                  class="flex-1 bg-sky-500 hover:bg-sky-600 text-white font-semibold py-2 px-4 rounded-md transition-colors duration-200"
+                >
+                  Pretraži
+                </button>
+                <button 
+                  type="button"
+                  (click)="clearSearch()"
+                  class="flex-1 bg-slate-500 hover:bg-slate-600 text-white font-semibold py-2 px-4 rounded-md transition-colors duration-200"
+                >
+                  Obriši
+                </button>
+              </div>
+            </form>
+          </div>
+        </div>
+      </div>
+      
+      <div class="sm:w-2/3" id="toys-container">
+        <div class="mb-6">
+          <h1 class="text-3xl font-bold text-sky-500 mb-2">Igračke</h1>
+          <p class="text-slate-600">Pronađite savršenu igračku za vaše dete</p>
+          @if (toys.length > 0) {
+            <p class="text-sm text-slate-500 mt-2">
+              Prikazano {{ filteredToys.length }} od {{ toys.length }} igračaka
+            </p>
+          }
+        </div>
+
+        @if (toys.length === 0) {
+          <div class="flex items-center justify-center py-20">
+            <div class="text-center">
+              <div class="inline-block animate-spin rounded-full h-12 w-12 border-b-2 border-sky-500 mb-4"></div>
+              <p class="text-slate-600">Učitavanje igračaka...</p>
+            </div>
+          </div>
+        }
+
+        @if (toys.length > 0 && filteredToys.length === 0) {
+          <div class="flex items-center justify-center py-20">
+            <div class="text-center">
+              <svg class="mx-auto h-16 w-16 text-slate-400 mb-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
+              </svg>
+              <h3 class="text-lg font-medium text-slate-900 mb-2">Nema rezultata</h3>
+              <p class="text-slate-600">Nema igračaka koje odgovaraju vašim kriterijumima pretrage.</p>
+              <button 
+                (click)="clearSearch()"
+                class="mt-4 bg-sky-500 hover:bg-sky-600 text-white font-semibold py-2 px-4 rounded-md transition-colors duration-200"
+              >
+                Obriši filtere
+              </button>
+            </div>
+          </div>
+        }
+
+        @if (filteredToys.length > 0) {
+          <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+            @for (toy of filteredToys; track toy.toyId) {
+              <div class="bg-white rounded-lg shadow-md hover:shadow-xl transition-shadow duration-300 overflow-hidden group flex flex-col h-full">
+                <div class="relative h-48 bg-slate-200 overflow-hidden">
+                  <img 
+                    [src]="'https://toy.pequla.com/' + toy.imageUrl" 
+                    [alt]="toy.name"
+                    class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-300"
+                  />
+                  <div class="absolute top-3 right-3 bg-rose-500 text-white px-3 py-1 rounded-full font-semibold text-sm shadow-lg">
+                    {{ toy.price | number }} RSD
+                  </div>
+                </div>
+
+                <div class="p-5 flex flex-col flex-1">
+                  <h3 class="text-xl font-bold text-slate-900 mb-2 line-clamp-2 group-hover:text-sky-500 transition-colors">
+                    {{ toy.name }}
+                  </h3>
+
+                  <p class="text-slate-600 text-sm mb-4 line-clamp-2">
+                    {{ toy.description }}
+                  </p>
+
+                  <div class="flex flex-wrap gap-2 mb-4">
+                    <span class="inline-flex items-center px-3 py-1 rounded-full text-xs font-medium bg-sky-100 text-sky-700">
+                      {{ toy.ageGroup.name }}
+                    </span>
+                    <span class="inline-flex items-center px-3 py-1 rounded-full text-xs font-medium bg-amber-100 text-amber-700">
+                      {{ toy.type.name }}
+                    </span>
+                    @if (toy.targetGroup == 'devojčica') {
+                      <span class="inline-flex items-center px-3 py-1 rounded-full text-xs font-medium bg-rose-100 text-rose-600">
+                        {{ toy.targetGroup }}
+                      </span>
+                    }
+                    @else if (toy.targetGroup == 'dečak') {
+                      <span class="inline-flex items-center px-3 py-1 rounded-full text-xs font-medium bg-blue-100 text-blue-700">
+                        {{ toy.targetGroup }}
+                      </span>
+                    }
+                  </div>
+
+                  <div class="text-xs text-slate-500 mb-3">
+                    Proizvedeno: {{ toy.productionDate | date:'dd.MM.yyyy' }}
+                  </div>
+
+                  <button class="w-full bg-amber-400 hover:bg-amber-500 text-slate-900 font-semibold py-2 px-4 rounded-lg transition-colors duration-200 mt-auto">
+                    Detaljnije
+                  </button>
+                </div>
+              </div>
+            }
+          </div>
+        }
+      </div>
+    </div>
+  </div>
+</div>
