@@ -1,4 +1,5 @@
 import { AgeGroup } from "./ageGroup";
+import { Rating } from "./rating";
 import { TypeOfToy } from "./typeOfToy";
 
 export interface Toy {
@@ -12,4 +13,5 @@ export interface Toy {
     "imageUrl": string;
     "ageGroup": AgeGroup;
     "type": TypeOfToy;
+    "ratings": Rating[] | null;
 }

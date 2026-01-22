@@ -2,11 +2,12 @@ import { Component, OnInit } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
+import { RouterModule } from '@angular/router';
 import { Toy } from '../../types/toy';
 
 @Component({
   selector: 'app-home',
-  imports: [CommonModule, FormsModule],
+  imports: [CommonModule, FormsModule, RouterModule],
   templateUrl: './home.html',
   styleUrl: './home.css',
 })
@@ -24,7 +25,9 @@ export class Home implements OnInit {
     cena_od: null as number | null,
     cena_do: null as number | null,
     datum_od: '',
-    datum_do: ''
+    datum_do: '',
+    min_ocena: null as number | null,
+    recesent_tip: ''
   };
 
   constructor(private http: HttpClient) {}
@@ -103,6 +106,30 @@ export class Home implements OnInit {
         }
       }
 
+      if (criteria.min_ocena !== null && criteria.min_ocena > 0) {
+        if (!toy.ratings || toy.ratings.length === 0) {
+          return false;
+        }
+        
+        const avgRating = toy.ratings.reduce((acc, rating) => acc + rating.rating, 0) / toy.ratings.length;
+        if (avgRating < criteria.min_ocena) {
+          return false;
+        }
+      }
+
+      if (criteria.recesent_tip) {
+        if (!toy.ratings || toy.ratings.length === 0) {
+          return false;
+        }
+        
+        const hasMatchingType = toy.ratings.some(rating => 
+          rating.recesentType === criteria.recesent_tip
+        );
+        if (!hasMatchingType) {
+          return false;
+        }
+      }
+
       return true;
     });
   }
@@ -117,7 +144,9 @@ export class Home implements OnInit {
       cena_od: null,
       cena_do: null,
       datum_od: '',
-      datum_do: ''
+      datum_do: '',
+      min_ocena: null,
+      recesent_tip: ''
     };
     this.filteredToys = this.toys;
   }
