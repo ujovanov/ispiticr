@@ -38,6 +38,22 @@ export class Singletoy implements OnInit {
     this.error = null;
     this.addedToCart = false;
 
+    const toysData = sessionStorage.getItem('toys_data');
+    if (toysData) {
+      try {
+        const toys: Toy[] = JSON.parse(toysData);
+        const toyFromStorage = toys.find(t => t.permalink === permalink);
+        if (toyFromStorage) {
+          this.toy = toyFromStorage;
+          this.isLoading = false;
+          this.checkIfInCart();
+          return;
+        }
+      } catch (error) {
+        console.error('Error parsing toys_data:', error);
+      }
+    }
+
     this.http.get<Toy>(`${this.API_URL}/${permalink}`).subscribe({
       next: (toy) => {
         this.toy = toy;
