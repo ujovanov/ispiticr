@@ -9,18 +9,24 @@
         />
       </div>
 
-      <nav class="flex items-center sm:space-x-2">
+      <nav class="flex flex-col sm:flex-row items-center sm:space-x-2">
         <a routerLink="/" class="text-slate-700 hover:text-sky-500 font-medium transition-colors duration-200 text-lg sm:text-base">
           Početna
         </a>
-        <a routerLink="/registration" class="text-slate-700 hover:text-sky-500 font-medium transition-colors duration-200 text-lg sm:text-base">
-          Registracijaja
+        <a *ngIf="!isLoggedIn()" routerLink="/registration" class="text-slate-700 hover:text-sky-500 font-medium transition-colors duration-200 text-lg sm:text-base">
+          Registracija
         </a>
-        <a routerLink="/login" class="text-slate-700 hover:text-sky-500 font-medium transition-colors duration-200 text-lg sm:text-base">
+        <a *ngIf="!isLoggedIn()" routerLink="/login" class="text-slate-700 hover:text-sky-500 font-medium transition-colors duration-200 text-lg sm:text-base">
           Prijava
         </a>
-        <a routerLink="/profile" class="text-slate-700 hover:text-sky-500 font-medium transition-colors duration-200 text-lg sm:text-base">
+        <a *ngIf="isLoggedIn()" routerLink="/cart" class="text-slate-700 hover:text-sky-500 font-medium transition-colors duration-200 text-lg sm:text-base">
+          Korpa
+        </a>
+        <a *ngIf="isLoggedIn()" routerLink="/profile" class="text-slate-700 hover:text-sky-500 font-medium transition-colors duration-200 text-lg sm:text-base">
           Profil
+        </a>
+        <a *ngIf="isLoggedIn()" (click)="logout()" class="text-slate-700 hover:text-sky-500 font-medium transition-colors duration-200 text-lg sm:text-base cursor-pointer">
+          Odjava
         </a>
       </nav>
     </div>

@@ -4,6 +4,7 @@ import { Singletoy } from './singletoy/singletoy';
 import { Registration } from './registration/registration';
 import { Login } from './login/login';
 import { Profile } from './profile/profile';
+import { Cart } from './cart/cart';
 
 export const routes: Routes = [
   {
@@ -25,6 +26,10 @@ export const routes: Routes = [
   {
     path: 'profile',
     component: Profile
+  },
+  {
+    path: 'cart',
+    component: Cart
   },
   {
     path: '**',

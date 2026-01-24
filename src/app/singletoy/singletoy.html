@@ -110,12 +110,29 @@
                   </div>
                 </div>
               </div>
+              @if (isLoggedIn()) {
               <div class="space-y-4">
-                <button class="w-full bg-amber-400 hover:bg-amber-500 text-slate-900 font-bold py-4 px-6 rounded-lg text-lg transition-colors duration-200 shadow-md hover:shadow-lg">
-                  Dodaj u korpu
+                <button 
+                  (click)="addToCart()"
+                  [disabled]="addedToCart"
+                  [class]="addedToCart 
+                    ? 'w-full bg-green-500 text-white font-bold py-4 px-6 rounded-lg text-lg cursor-default shadow-md'
+                    : 'w-full bg-amber-400 hover:bg-amber-500 text-slate-900 font-bold py-4 px-6 rounded-lg text-lg transition-colors duration-200 shadow-md hover:shadow-lg'"
+                >
+                  {{ addedToCart ? 'Dodato u korpu ✓' : 'Dodaj u korpu' }}
                 </button>
+                <a *ngIf="addedToCart" routerLink="/cart" class="block w-full text-center bg-sky-500 hover:bg-sky-600 text-white font-bold py-3 px-6 rounded-lg transition-colors duration-200">
+                  Pogledaj korpu
+                </a>
               </div>
-
+              }
+              @else {
+                <div class="space-y-4">
+                  <a routerLink="/login" class="w-full bg-amber-400 hover:bg-amber-500 text-slate-900 font-bold py-4 px-6 rounded-lg text-lg transition-colors duration-200 shadow-md hover:shadow-lg cursor-pointer">
+                    Prijavite se da biste dodali igračku u korpu
+                  </a>
+                </div>
+              }
             </div>
           </div>
         </div>

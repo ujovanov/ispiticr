@@ -1,16 +1,22 @@
 import { Component } from '@angular/core';
 import { RouterLink, RouterOutlet } from '@angular/router';
+import { CommonModule } from '@angular/common';
 
 @Component({
   selector: 'app-root',
-  imports: [RouterOutlet, RouterLink],
+  imports: [RouterOutlet, RouterLink, CommonModule],
   templateUrl: './app.component.html',
   styleUrl: './app.component.css'
 })
 
-
-
 export class AppComponent {
   title = 'Homepage';
-}
 
+  isLoggedIn(): boolean {
+    return localStorage.getItem('currentUser') !== null;
+  }
+
+  logout(): void {
+    localStorage.removeItem('currentUser');
+  }
+}
